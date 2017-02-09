@@ -1,0 +1,109 @@
+import sys
+import numpy as np
+
+#GAME INTRODUCTION--------------------------------------------------------------
+print('UNBEATABLE TIC-TAC-TOE') 
+print( )
+input('If you would like to play, press ENTER: ')
+
+#VARIABLES/BOARD---------------------------------------------------------------------
+game_board = np.empty([3, 3], dtype = str)
+
+
+#HELPER FUNCTIONS---------------------------------------------------------------
+def conversion(string):
+	coordinates = []
+	for element in list(string):
+		if element in ['0', '1', '2']:
+			coordinates.append(int(element))
+	return coordinates
+
+def is_occupied(coordinates):
+	if game_board[coordinates[0],coordinates[1]] == 'x' or game_board[coordinates[0],coordinates[1]] == 'o':
+		return True
+	else:
+		return False
+
+def random_move():
+	unoccupied_spaces = []
+	for i in range(3):
+		for j in range(3):
+			if game_board[i, j] == '':
+				unoccupied_spaces.append([i, j])
+	x = np.random.randint(0, len(unoccupied_spaces))
+	coordinates = unoccupied_spaces[x]
+	game_board[coordinates[0], coordinates[1]] = 'x'
+	return game_board
+
+def player_move():
+	x = input("Type the coordinates of your move in the form (a, b): ")
+	coordinates = conversion(x)
+	if game_board[coordinates[0], coordinates[1]] != '':
+		print('You cannot move there.')
+		player_move()
+	else:
+		game_board[coordinates[0], coordinates[1]] = 'o'
+	return coordinates
+
+def computer_move():
+	coordinates = player_move()
+	print(game_board)
+	input()
+	if coordinates == [0, 0]:
+		if is_occupied([1, 0]) == False:
+			game_board[1, 0] = 'x'
+		else:
+			random_move()
+	elif coordinates == [0, 1]:
+		if is_occupied([0, 2]) == False:
+			game_board[0, 2] = 'x'
+		else:
+			random_move()
+	elif coordinates == [1, 0]:
+		if is_occupied([0, 0]) == False:
+			game_board[0, 0] = 'x'
+		else:
+			random_move()
+	elif coordinates == [1, 2]:
+		if is_occupied([2, 2]) == False:
+			game_board[2, 2] = 'x'
+		else:
+			random_move()
+	elif coordinates == [0, 2]:
+		if is_occupied([0, 1]) == False:
+			game_board[0, 1] = 'x'
+		else:
+			random_move()
+	elif coordinates == [2, 2]:
+		if is_occupied([1, 2]) == False:
+			game_board[1, 2] == 'x'
+		else:
+			random_move()
+	elif coordinates == [2, 1]:
+		if is_occupied([2, 0]) == False:
+			game_board[2, 0] = 'x'
+		else:
+			random_move()
+	elif coordinates == [2, 0]:
+		if is_occupied([2, 1]) == False:
+			game_board[2, 1] = 'x'
+		else:
+			random_move()
+	print(game_board)
+
+#GAMEPLAY-------------------------------------------------------------------------
+x = input('If you would like to go first, type 1. If you would like to go second, type 2.')
+if x == '1':
+	pass
+elif x == '2':
+	game_board[1, 1] = 'x'
+	print(game_board)
+	while '' in game_board: 
+		computer_move()
+	if '' not in game_board:
+		print()
+		print("GAME OVER")
+		exit()
+else: 
+	print('Error: press either 1 or 2')
+	exit()
